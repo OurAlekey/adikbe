@@ -1,0 +1,145 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { buildSrcset, webpSrc } from '../../utils/images';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  author: { '@type': 'Organization', name: post.data.autor },
+  publisher: { '@type': 'NGO', name: "ADIKB'E" },
+  keywords: post.data.keywords?.join(', '),
+  image: post.data.image ? new URL(post.data.image, Astro.site).toString() : undefined,
+  mainEntityOfPage: Astro.url.toString(),
+};
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image}
+  keywords={post.data.keywords?.join(', ')}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <article class="section post">
+    <div class="container post__container">
+      <a href="/blog/" class="back-link">&larr; Volver al blog</a>
+      {post.data.eje && <span class="tag">{post.data.eje}</span>}
+      <h1>{post.data.title}</h1>
+      <p class="post__meta">
+        Por {post.data.autor} ·{' '}
+        {post.data.pubDate.toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </p>
+      {post.data.image && (
+        <picture>
+          <source
+            srcset={buildSrcset(post.data.image, 'webp') ?? webpSrc(post.data.image)}
+            sizes="(max-width: 760px) 100vw, 760px"
+            type="image/webp"
+          />
+          <img
+            src={post.data.image}
+            srcset={buildSrcset(post.data.image, 'original')}
+            sizes="(max-width: 760px) 100vw, 760px"
+            alt={post.data.title}
+            decoding="async"
+            class:list={['post__image', post.data.image === '/LogoSinFondo.png' && 'post__image--logo']}
+          />
+        </picture>
+      )}
+      <div class="post__content">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <section class="section section--dark">
+    <div class="container donate-cta">
+      <div>
+        <h2>¿Quieres apoyar este tipo de proyectos?</h2>
+        <p>Tu donación o alianza ayuda a que sigamos avanzando en el territorio.</p>
+      </div>
+      <a href="/contacto/" class="btn btn--primary">Quiero colaborar</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .post__container {
+    max-width: 760px;
+  }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .post__meta {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .post__container picture {
+    display: block;
+    width: 100%;
+  }
+  .post__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+  }
+  .post__image--logo {
+    object-fit: contain;
+    background: var(--color-cream-dark);
+    padding: 2.5rem;
+  }
+  .post__content :global(h2) {
+    margin-top: 2rem;
+  }
+  .post__content :global(p) {
+    color: var(--color-text);
+  }
+  .post__content :global(img) {
+    width: 100%;
+    border-radius: var(--radius);
+    margin: 1.75rem 0;
+  }
+  .post__content :global(ul) {
+    padding-left: 1.2rem;
+  }
+
+  /* Galería de varias fotos dentro del cuerpo del artículo */
+  .post__content :global(.post-gallery) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 1.75rem 0;
+  }
+  .post__content :global(.post-gallery img) {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .post__content :global(.post-gallery-caption) {
+    margin: -1.25rem 0 1.75rem;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+  }
+</style>

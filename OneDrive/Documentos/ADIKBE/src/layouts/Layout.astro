@@ -1,0 +1,80 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  keywords?: string;
+}
+
+const {
+  title,
+  description = "ADIKB'E — Asociación de Desarrollo Integral K'ak' B'e. Desarrollo comunitario, agroecología y restauración de ecosistemas en el territorio maya K'iche' de Sololá, Guatemala.",
+  image = '/LogoSinFondo.png', // ideal a futuro: una imagen 1200x630 dedicada para redes sociales
+  keywords = "ADIKBE, ADIKB'E, Asociación ADIKBE, Kak Be, Kakbe, K'ak' B'e, Asociación K'ak' B'e, Asociación de Desarrollo Integral K'ak' B'e, asociación Sololá, ONG Sololá, ONG Guatemala, agroecología Guatemala, reforestación Sololá, desarrollo comunitario maya K'iche'",
+} = Astro.props;
+
+const pageTitle = title.includes("ADIKB'E") ? title : `${title} · ADIKB'E`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: "ADIKB'E",
+  alternateName: [
+    'ADIKBE',
+    "Asociación ADIKB'E",
+    "Asociación de Desarrollo Integral K'ak' B'e",
+    "K'ak' B'e",
+    'Kak Be',
+    'Kakbe',
+  ],
+  description,
+  url: Astro.site,
+  logo: new URL(image, Astro.site),
+  email: 'asociacionkakbe@gmail.com',
+  telephone: '+502 4646 1825',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Sector 1, Aldea María Tecún Alayo, zona 0, Km. 137.5 Carretera Interamericana',
+    addressLocality: 'Sololá',
+    addressCountry: 'GT',
+  },
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image" href="/LogoSinFondo.png" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

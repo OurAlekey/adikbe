@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Carousel from '../components/Carousel.astro';
+
+const equipo = [
+  {
+    nombre: 'William Isaac Menchú Say',
+    cargo: 'Director de Proyectos',
+    bio: "Guatemalteco maya k'iche', con más de siete años de experiencia trabajando junto a comunidades y pueblos indígenas en Guatemala y Costa Rica. Su trayectoria se construyó en el altiplano guatemalteco, complementada con una Maestría en Ciencias en Manejo y Conservación de Bosques Tropicales y Biodiversidad en el CATIE. Entre 2018 y 2023 trabajó en la Asociación Vivamos Mejor, en alianza con la UICN, la Fundación para la Conservación de los Recursos Naturales y Ambiente en Guatemala (FCA) y la cooperación técnica alemana (BMZ). Entre 2023 y 2025 coordinó el II y III Encuentro de la Alianza Nacional de Mujeres Indígenas de Costa Rica, articulado entre el CATIE, el IICA, la Red Latinoamericana de Bosques Modelo, la Asociación Kjalá Bata y la Cooperación Española. Actualmente es Investigador Asociado del CATIE, donde lidera una investigación regional sobre políticas de inclusión de pueblos indígenas en educación superior, en alianza con el CIESAS (México).",
+  },
+  {
+    nombre: 'Lucero Celeste Cabrera Ordóñez',
+    cargo: 'Especialista en Educación y Gestión Ambiental',
+    bio: 'Guatemalteca con más de cinco años de experiencia en proyectos de cooperación internacional en Guatemala y otros países de Latinoamérica como Bolivia, Ecuador, Costa Rica, Chile y Perú. Trabajando estrechamente con el PNUD, FLACSO, la UICN y ChildFund, ha ocupado roles técnicos y de coordinación. Actualmente coordina la Red Latinoamericana de Juventudes de los Bosques Modelo, una iniciativa pionera activa en varios países que promueve el liderazgo intergeneracional y la gobernanza ambiental juvenil a escala regional, garantizando que las iniciativas de la organización sean inclusivas y sostenibles desde lo social, cultural y económico.',
+  },
+  {
+    nombre: 'Bartola Ernestina Nohemy Juc Suc',
+    cargo: 'Especialista en Sistemas de Producción Agroecológicos y Gobernanza Comunitaria',
+    bio: "Guatemalteca maya Q'eqchi', actualmente candidata al título de Maestra en Agroecología en el Colegio de la Frontera Sur (ECOSUR), con más de cinco años en coordinación y gestión de proyectos junto a la Reserva Natural Comunitaria Corazón del Bosque, en alianza con la Asociación de Forestería Comunitaria de Guatemala Utz Che', ejecutando fondos financieros del Banco Mundial, el PNUD y el Agroecology Fund. Dentro de la organización, es el enlace directo con los procesos de gestión y formación de AMOSTRUS.",
+  },
+];
+
+const aliados = [
+  'UICN', 'PNUD', 'FLACSO', 'CATIE', 'IICA', 'CIESAS', 'ChildFund',
+  'Banco Mundial', 'Agroecology Fund', 'AMOSTRUS (Londres)',
+  'Asociación Vivamos Mejor', "Utz Che' — Forestería Comunitaria de Guatemala",
+  'Red Latinoamericana de Bosques Modelo', 'Asociación Kjalá Bata',
+  'Cooperación Española', 'Cooperación Técnica Alemana (BMZ)',
+  'Fondo de Pequeñas Donaciones FCG',
+];
+
+const proyectos = [
+  {
+    nombre: 'Premio GEMAS — Proyecto Bosque Escuela',
+    detalle: 'Gracias al apoyo de nuestros colaboradores voluntarios, comenzamos la formación con el apoyo del fondo GEMAS y Bosque Escuela para fortalecer los conocimientos sobre el cambio climatico y restauración de ecosistemas',
+    imagenes: [
+      { src: '/images/bosque-escuela-1.jpeg', alt: 'Vivero forestal con plántulas de árboles nativos bajo malla sombra' },
+      { src: '/images/bosque-escuela-2.jpeg', alt: 'Visita técnica de formación en un patio rural' },
+      { src: '/images/bosque-escuela-3.jpeg', alt: 'Elaboración de abono orgánico durante una jornada de formación práctica' },
+      { src: '/images/bosque-escuela-4.jpeg', alt: 'Recorrido de observación del paisaje forestal de la RUMCLA' },
+    ],
+  },
+  {
+    nombre: 'Manejo agroecológico de la araña roja (con AMOSTRUS, Londres)',
+    detalle: "Proyecto \"Manejo agroecológico de la araña roja Tetranychus urticae\", bajo el eje de justicia climática de AMOSTRUS, con el objetivo de reducir la vulnerabilidad de las mujeres indígenas frente al Cambio Climático. En proceso de formación previo a la ejecución del fondo.",
+    imagenes: [
+      { src: '/images/arana-roja-2.jpeg', alt: 'Taller comunitario sobre manejo agroecológico de la araña roja' },
+      { src: '/images/arana-roja-1.jpeg', alt: 'Material informativo del taller, explicando la diferencia entre un insecto y un ácaro' },
+      { src: '/images/arana-roja-3.jpeg', alt: 'Familias de la comunidad siguiendo el taller' },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Equipo y Aliados"
+  description="Conoce al equipo técnico de ADIKB'E y a las organizaciones aliadas que respaldan nuestro trabajo comunitario en Sololá, Guatemala."
+>
+  <section class="section section--tight hero-page">
+    <div class="container">
+      <span class="eyebrow">Equipo y aliados</span>
+      <h1>Personas con años de experiencia en el territorio</h1>
+      <p class="section-lead">
+        ADIKB'E es una organización joven en la gestión de fondos externos,
+        pero está respaldada por un equipo técnico que en conjunto suma más
+        de 10 años de trabajo junto a las comunidades y la cooperación
+        internacional, con experiencia verificable en proyectos de pequeña,
+        mediana y gran escala.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--3">
+        {equipo.map((persona) => (
+          <div class="card team-card">
+            <h3>{persona.nombre}</h3>
+            <p class="team-card__cargo">{persona.cargo}</p>
+            <p>{persona.bio}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">Proyectos en formación</span>
+      <h2>Dónde estamos hoy</h2>
+      <div class="grid grid--2">
+        {proyectos.map((p) => (
+          <div class="card proyecto-card">
+            <div class="proyecto-card__gallery">
+              <Carousel slides={p.imagenes} ariaLabel={`Fotos del proyecto: ${p.nombre}`} />
+            </div>
+            <div class="proyecto-card__body">
+              <h3>{p.nombre}</h3>
+              <p>{p.detalle}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- <section class="section">
+    <div class="container">
+      <span class="eyebrow">Aliados y cooperantes</span>
+      <h2>Organizaciones con las que hemos trabajado</h2>
+      <p class="section-lead">
+        Nuestro equipo técnico llega respaldado por años de trabajo en campo,
+        en cooperación internacional y en procesos de rendición de cuentas
+        ante fondos ambientales competitivos.
+      </p>
+      <div class="aliados-grid">
+        {aliados.map((a) => (
+          <span class="aliado-chip">{a}</span>
+        ))}
+      </div>
+    </div>
+  </section> -->
+
+  <section class="section section--dark">
+    <div class="container donate-cta">
+      <div>
+        <h2>¿Representas una organización interesada en aliarse con nosotros?</h2>
+        <p>Escríbenos y conversemos sobre cómo podemos trabajar juntos en la RUMCLA.</p>
+      </div>
+      <a href="/contacto/" class="btn btn--primary">Contáctanos</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .section-lead {
+    max-width: 720px;
+    color: var(--color-text-muted);
+  }
+  .team-card__cargo {
+    color: var(--color-orange-600);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: -0.5rem;
+  }
+  .proyecto-card {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .proyecto-card__gallery :global(.carousel__track) {
+    border-radius: 0;
+  }
+  .proyecto-card__gallery :global(.carousel__caption) {
+    display: none;
+  }
+  .proyecto-card__body {
+    padding: 1.5rem 1.75rem 1.75rem;
+  }
+  .aliados-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .aliado-chip {
+    background: var(--color-white);
+    border: 1px solid var(--color-cream-dark);
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-green-900);
+  }
+</style>

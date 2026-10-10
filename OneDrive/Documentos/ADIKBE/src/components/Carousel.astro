@@ -1,0 +1,207 @@
+---
+import { buildSrcset } from '../utils/images';
+
+interface Slide {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  slides: Slide[];
+  ariaLabel?: string;
+  /** Pista de ancho real de renderizado, para que el navegador no baje una
+   * imagen más grande de la que necesita en pantallas chicas / mala conexión. */
+  sizes?: string;
+}
+
+const { slides, ariaLabel = 'Galería de fotos', sizes = '(max-width: 650px) 100vw, 530px' } = Astro.props;
+---
+
+<div class="carousel" role="region" aria-roledescription="carrusel" aria-label={ariaLabel}>
+  <div class="carousel__track" role="list">
+    {slides.map((slide, i) => (
+      <div class="carousel__slide" role="listitem">
+        <picture>
+          <source srcset={buildSrcset(slide.src, 'webp')} sizes={sizes} type="image/webp" />
+          <img
+            src={slide.src}
+            srcset={buildSrcset(slide.src, 'original')}
+            sizes={sizes}
+            alt={slide.alt}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding={i === 0 ? 'sync' : 'async'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
+          />
+        </picture>
+        {slide.caption && <p class="carousel__caption">{slide.caption}</p>}
+      </div>
+    ))}
+  </div>
+
+  <button type="button" class="carousel__btn carousel__btn--prev" aria-label="Imagen anterior">‹</button>
+  <button type="button" class="carousel__btn carousel__btn--next" aria-label="Siguiente imagen">›</button>
+
+  <div class="carousel__dots">
+    {slides.map((_, i) => (
+      <button type="button" class="carousel__dot" aria-label={`Ir a la imagen ${i + 1}`}></button>
+    ))}
+  </div>
+</div>
+
+<style>
+  .carousel {
+    position: relative;
+  }
+
+  .carousel__track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    border-radius: var(--radius);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel__slide {
+    position: relative;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+  .carousel__slide picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .carousel__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .carousel__caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 3rem 1.5rem 1.25rem;
+    background: linear-gradient(to top, rgba(18, 50, 31, 0.9), rgba(18, 50, 31, 0));
+    color: var(--color-white);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .carousel__btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255, 255, 255, 0.28);
+    color: var(--color-green-900);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: none;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .carousel__btn:hover,
+  .carousel__btn:focus-visible {
+    background: var(--color-white);
+    box-shadow: var(--shadow);
+  }
+  .carousel__btn:active {
+    background: var(--color-orange-500);
+    color: var(--color-white);
+  }
+  .carousel__btn--prev { left: 0.75rem; }
+  .carousel__btn--next { right: 0.75rem; }
+
+  .carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .carousel__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: none;
+    background: var(--color-cream-dark);
+    padding: 0;
+    cursor: pointer;
+  }
+  .carousel__dot.is-active {
+    background: var(--color-orange-500);
+  }
+
+  @media (max-width: 640px) {
+    .carousel__slide { aspect-ratio: 4 / 5; }
+    .carousel__btn { width: 36px; height: 36px; font-size: 1.2rem; }
+    .carousel__caption { font-size: 1rem; }
+  }
+</style>
+
+<script>
+  const carousels = document.querySelectorAll<HTMLElement>('.carousel');
+
+  carousels.forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('.carousel__track');
+    const slides = Array.from(carousel.querySelectorAll<HTMLElement>('.carousel__slide'));
+    const prevBtn = carousel.querySelector<HTMLButtonElement>('.carousel__btn--prev');
+    const nextBtn = carousel.querySelector<HTMLButtonElement>('.carousel__btn--next');
+    const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>('.carousel__dot'));
+
+    if (!track || slides.length === 0) return;
+
+    const setActiveDot = (index: number) => {
+      dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+    };
+    setActiveDot(0);
+
+    const scrollToSlide = (index: number) => {
+      // Navegación infinita: al pasar el último vuelve al primero, y viceversa.
+      const wrapped = (index + slides.length) % slides.length;
+      slides[wrapped].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+    };
+
+    prevBtn?.addEventListener('click', () => {
+      const current = dots.findIndex((d) => d.classList.contains('is-active'));
+      scrollToSlide(current - 1);
+    });
+    nextBtn?.addEventListener('click', () => {
+      const current = dots.findIndex((d) => d.classList.contains('is-active'));
+      scrollToSlide(current + 1);
+    });
+    dots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSlide(i)));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = slides.indexOf(entry.target as HTMLElement);
+            if (index !== -1) setActiveDot(index);
+          }
+        });
+      },
+      { root: track, threshold: 0.6 }
+    );
+    slides.forEach((slide) => observer.observe(slide));
+  });
+</script>

@@ -1,0 +1,326 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Carousel from '../components/Carousel.astro';
+import { getCollection } from 'astro:content';
+import { buildSrcset, webpSrc } from '../utils/images';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const galeria = [
+  {
+    src: '/images/primera.jpeg',
+    alt: "Taller comunitario en un salón de madera, con participantes reunidos frente a una proyección",
+    caption: 'Talleres y capacitaciones con la comunidad',
+  },
+  {
+    src: '/images/segunda.jpeg',
+    alt: 'Visita de campo junto a un representante del PNUD, conversando con miembros de la comunidad',
+    caption: 'Visitas técnicas y alianzas institucionales en el territorio',
+  },
+  {
+    src: '/images/tercera.jpeg',
+    alt: 'Recorrido técnico en un patio rural, junto a sistemas de almacenamiento de agua',
+    caption: 'Acompañamiento técnico en sistemas agroecológicos',
+  },
+  {
+    src: '/images/cuarta.jpeg',
+    alt: 'Puesto de venta en una feria comunitaria con productos artesanales',
+    caption: 'Apoyo a emprendimientos comunitarios',
+  },
+  {
+    src: '/images/quinta.jpeg',
+    alt: 'Vivero forestal con plántulas de árboles nativos bajo malla sombra',
+    caption: 'Viveros forestales para la restauración de ecosistemas',
+  },
+];
+
+const ejes = [
+  { titulo: 'Educación Transformadora', resumen: 'Pensamiento crítico, identidad cultural y habilidades para la vida.' },
+  { titulo: 'Restauración de Ecosistemas', resumen: 'Reforestación con especies nativas y conservación de fuentes de agua.' },
+  { titulo: 'Agroecología y Seguridad alimentaria', resumen: 'Suelos sanos, biodiversidad y alimentos libres de agroquímicos.' },
+  { titulo: 'Emprendimientos Comunitarios', resumen: 'Ingresos y empleos dignos que reducen la necesidad de migrar.' },
+];
+---
+
+<Layout
+  title="ADIKB'E — Nuevo camino para las comunidades de Sololá"
+  description="Asociación de Desarrollo Integral K'ak' B'e: desarrollo comunitario, agroecología y restauración de ecosistemas en el territorio maya K'iche' de Sololá, Guatemala."
+>
+  <section class="hero">
+    <div class="hero__bg">
+      <Carousel slides={galeria} ariaLabel="Fotos del trabajo de ADIKB'E en el territorio" sizes="100vw" />
+    </div>
+    <div class="hero__scrim" aria-hidden="true"></div>
+
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <h1>Asociación para el Desarrollo Integral K'AK' B'E.</h1>
+        <h3
+        style="color: white"
+        >K'AK B'E. Un nuevo camino.</h3>
+        <p class="hero__lead">
+          Nacimos en 2013 en las comunidades del pueblo maya K'iche' de Sololá,
+          al ver a jóvenes preparados, con sueños y capacidades y tener que dejar
+          su territorio incluso migrar a Estados Unidos por falta de
+          oportunidades dignas. Hoy como organización trabajamos con las
+          comunidades conservando los saberes ancestrales de la mano de las personas que conoce su tierra y sus fortalezas
+          para construir un nuevo camino.
+        </p>
+        <div class="hero__actions">
+          <a href="/contacto/" class="btn btn--primary">Apoya nuestra causa</a>
+          <a href="/quienes-somos/" class="btn btn--on-dark">Conoce nuestra historia</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="mission-grid">
+        <div class="card">
+          <span class="tag">Misión</span>
+          <p>
+            Crear oportunidades de desarrollo integral para jóvenes, mujeres y
+            familias de la Reserva de Usos Multiples de la Cuenca del Lago de Atitlán (RUMCLA) mediante aeducación, cadenas de valor,
+            agroecología y seguridad alimentaria, restauración ambiental y recreación para que las personas puedan vivir dignamente en su
+            territorio, sin necesidad de migrar.
+          </p>
+        </div>
+        <div class="card">
+          <span class="tag">Visión</span>
+          <p>
+            Al 2030, ser una organización referente en el altiplano
+            guatemalteco en la implementación de modelos de desarrollo
+            comunitario sostenible, donde las juventudes y mujeres lideran
+            procesos de transformación social.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">Nuestro trabajo</span>
+      <h2>Ejes de trabajo un mismo territorio</h2>
+      <p class="section-lead">
+        Trabajamos en la Reserva de Usos Múltiples de la Cuenca del Lago de
+        Atitlán (RUMCLA), combinando el conocimiento ancestral maya K'iche'
+        con prácticas contemporáneas de desarrollo sostenible.
+      </p>
+      <div class="grid grid--2 ejes-preview">
+        {ejes.map((eje) => (
+          <div class="card">
+            <h3>{eje.titulo}</h3>
+            <p>{eje.resumen}</p>
+          </div>
+        ))}
+      </div>
+      <a href="/ejes-de-trabajo/" class="btn btn--secondary">Ver los ejes de trabajo</a>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container donate-cta">
+      <div>
+        <span class="eyebrow">Súmate</span>
+        <h2>Cada recurso recibido es una responsabilidad con las comunidades que acompañamos.</h2>
+        <p>
+          Puedes apoyar con una donación, sumarte como voluntario, aliado
+          institucional o simplemente dejarnos tus datos para mantenerte
+          informado de nuestros proyectos.
+        </p>
+      </div>
+      <a href="/contacto/" class="btn btn--primary">Quiero colaborar</a>
+    </div>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow">Actualizaciones</span>
+        <h2>Últimas noticias de nuestros proyectos</h2>
+        <div class="grid grid--3">
+          {posts.map((post) => (
+            <a href={`/blog/${post.slug}/`} class="card post-card">
+              {post.data.image && (
+                <picture>
+                  <source
+                    srcset={buildSrcset(post.data.image, 'webp') ?? webpSrc(post.data.image)}
+                    sizes="(max-width: 650px) 100vw, (max-width: 900px) 50vw, 360px"
+                    type="image/webp"
+                  />
+                  <img
+                    src={post.data.image}
+                    srcset={buildSrcset(post.data.image, 'original')}
+                    sizes="(max-width: 650px) 100vw, (max-width: 900px) 50vw, 360px"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    class:list={['post-card__image', post.data.image === '/LogoSinFondo.png' && 'post-card__image--logo']}
+                  />
+                </picture>
+              )}
+              <div class="post-card__body">
+                {post.data.eje && <span class="tag">{post.data.eje}</span>}
+                <h3>{post.data.title}</h3>
+                <p>{post.data.description}</p>
+                <span class="post-card__date">
+                  {post.data.pubDate.toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+        <a href="/blog/" class="btn btn--secondary mt-3">Ver todo el blog</a>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 6.5rem 0;
+    color: var(--color-cream);
+  }
+
+  /* Carrusel usado como fondo a pantalla completa del hero */
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+  }
+  .hero__bg :global(.carousel),
+  .hero__bg :global(.carousel__track) {
+    height: 100%;
+  }
+  .hero__bg :global(.carousel__track) {
+    border-radius: 0;
+  }
+  .hero__bg :global(.carousel__slide) {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+  .hero__bg :global(.carousel__caption) {
+    display: none;
+  }
+  .hero__bg :global(.carousel__btn),
+  .hero__bg :global(.carousel__dots) {
+    z-index: 2;
+  }
+  .hero__bg :global(.carousel__dots) {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 0;
+    right: 0;
+    margin-top: 0;
+  }
+  .hero__bg :global(.carousel__dot) {
+    background: rgba(255, 255, 255, 0.45);
+  }
+  .hero__bg :global(.carousel__dot.is-active) {
+    background: var(--color-orange-500);
+  }
+
+  /* Velo oscuro sobre las fotos para que el texto sea legible */
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      rgba(18, 50, 31, 0.92) 0%,
+      rgba(18, 50, 31, 0.68) 50%,
+      rgba(18, 50, 31, 0.4) 100%
+    );
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero h1 { color: var(--color-white); }
+
+  .hero__content { max-width: 760px; }
+  .hero__lead {
+    font-size: 1.15rem;
+    color: var(--color-cream);
+  }
+  .hero__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 720px) {
+    .hero__scrim {
+      background: rgba(18, 50, 31, 0.72);
+    }
+  }
+
+  .mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .section-lead {
+    max-width: 680px;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .ejes-preview { margin-bottom: 2rem; }
+
+  .donate-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .donate-cta > div { max-width: 640px; }
+  .donate-cta p { color: var(--color-cream-dark); }
+
+  .post-card {
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+  .post-card:hover { text-decoration: none; transform: translateY(-3px); transition: transform 0.15s ease; }
+  .post-card picture {
+    display: block;
+    width: 100%;
+  }
+  .post-card__image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    display: block;
+  }
+  .post-card__image--logo {
+    object-fit: contain;
+    background: var(--color-cream-dark);
+    padding: 1.5rem;
+  }
+  .post-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem 1.75rem 1.75rem;
+    flex: 1;
+  }
+  .post-card__date {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    margin-top: auto;
+  }
+</style>

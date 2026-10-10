@@ -1,0 +1,172 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const ejes = [
+  {
+    numero: '01',
+    titulo: 'Educación Transformadora',
+    objetivo: 'Fortalecer las capacidades educativas de niños, niñas, jóvenes y personas adultas mediante procesos formativos contextualizados que promuevan el pensamiento crítico, la identidad cultural y las habilidades para la vida.',
+    lineas: [
+      'Capacitaciones a organizaciones de padres y madres de familia en centros educativos (OPF)',
+      'Formación docente en pedagogías pertinentes culturalmente',
+      'Clases de reforzamiento escolar y acompañamiento académico',
+      'Escuela de arte y música con enfoque intercultural',
+      'Alfabetización digital y acceso a tecnologías de información',
+      'Capacitación empresarial y organizacional',
+      'Formación en derechos humanos y participación ciudadana',
+    ],
+  },
+  {
+    numero: '02',
+    titulo: 'Deporte y Recreación Comunitaria',
+    objetivo: 'Crear y sostener espacios de recreación, convivencia sana y desarrollo físico que fortalezcan el tejido social comunitario, especialmente entre las juventudes.',
+    lineas: [
+      'Organización de clubes deportivos (fútbol, básquetbol, atletismo)',
+      'Torneos intercomunitarios',
+      'Espacios de recreación infantil',
+      'Actividades culturales y artísticas comunitarias',
+      'Formación de promotores deportivos locales',
+      'Recuperación de juegos tradicionales mayas',
+    ],
+  },
+
+   {
+    numero: '03',
+    titulo: 'Agroecología, Seguridad Alimentaria y Nutricional',
+    objetivo: 'Promover sistemas de producción agrícola que regeneren los suelos, protejan la biodiversidad y generen alimentos sanos, recuperando prácticas ancestrales y combinándolas con innovaciones apropiadas.',
+    lineas: [
+      'Elaboración y uso de abonos orgánicos (compost, bocashi, lombricompost)',
+      'Capacitación en prácticas agroecológicas (policultivos, agroforestería, barreras vivas)',
+      'Producción de bioinsumos (biopreparados, caldos minerales, purines)',
+      'Sistemas de cosecha de agua para agricultura',
+      'Manejo integrado de plagas con métodos ecológicos',
+      'Rescate de semillas criollas, nativas y documentación de conocimientos agrícolas tradicionales',
+      'Parcelas demostrativas y escuelas de campo',
+      'Huertos familiares y escolares agroecológicos',
+    ],
+  },
+  {
+    numero: '04',
+    titulo: 'Restauración de Ecosistemas',
+    objetivo: 'Contribuir a la conservación y restauración de ecosistemas de la RUMCLA a través de acciones participativas que involucren a las comunidades como gestores de su territorio.',
+    lineas: [
+      'Jornadas de reforestación con especies nativas',
+      'Conservación de fuentes de agua y microcuencas',
+      'Manejo integral de residuos sólidos',
+      'Elaboración y uso de ecoladrillos',
+      'Educación ambiental en centros educativos y comunidades',
+      'Restauración de bosques ribereños',
+      'Promoción de energías limpias y alternativas',
+    ],
+  },
+  {
+    numero: '05',
+    titulo: 'Cadenas de valor',
+    objetivo: 'Impulsar la creación y fortalecimiento de micro y pequeñas empresas comunitarias que generen ingresos y empleos dignos, reduciendo la necesidad de migración.',
+    lineas: [
+      'Formación y acompañamiento a grupos de mujeres emprendedoras',
+      'Apoyo en gestión empresarial y mercadeo',
+      'Creación de redes de comercialización local y regional',
+      'Acceso a microcréditos y capital semilla',
+      'Desarrollo de marcas colectivas con identidad cultural',
+      'Turismo comunitario responsable',
+    ],
+  },
+ 
+];
+---
+
+<Layout
+  title="Ejes de Trabajo"
+  description="Los siete ejes de trabajo de ADIKB'E: educación, deporte, seguridad alimentaria, restauración de ecosistemas, emprendimientos y agroecología en la RUMCLA."
+>
+  <section class="section section--tight hero-page">
+    <div class="container">
+      <span class="eyebrow">Nuestro trabajo</span>
+      <h1>Ejes de trabajo un mismo territorio</h1>
+      <p class="section-lead">
+        Cada eje responde a las necesidades de las comunidades en la búsqueda de sistemas alimentarios dignos y propios 
+        sin olvidar la conservación y restauración del entorno, respetando el conocimiento ancestral, partiendo de
+        una propuesta integral.
+      </p>
+    </div>
+  </section>
+
+  <section class="section ejes-list">
+    <div class="container">
+      {ejes.map((eje, index) => (
+        <article class="eje-block" id={eje.titulo.toLowerCase().replace(/\s+/g, '-')}>
+          <div class="eje-block__number">{index+1}</div>
+          <div class="eje-block__body">
+            <h2>{eje.titulo}</h2>
+            <p class="eje-block__objetivo"><strong>Objetivo:</strong> {eje.objetivo}</p>
+            <p class="eje-block__lineas-label">Líneas de acción</p>
+            <ul class="eje-block__lineas">
+              {eje.lineas.map((linea) => <li>{linea}</li>)}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container donate-cta">
+      <div>
+        <h2>¿Quieres apoyar alguno de estos ejes?</h2>
+        <p>Tu donación o alianza puede fortalecer directamente el trabajo que hacemos en el territorio.</p>
+      </div>
+      <a href="/contacto/" class="btn btn--primary">Quiero colaborar</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .section-lead {
+    max-width: 720px;
+    color: var(--color-text-muted);
+  }
+
+  .eje-block {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1.5rem;
+    padding: 2.25rem 0;
+    border-bottom: 1px solid var(--color-cream-dark);
+  }
+  .eje-block:first-child { padding-top: 0; }
+  .eje-block:last-child { border-bottom: none; }
+
+  .eje-block__number {
+    font-family: var(--font-heading);
+    font-size: 2.75rem;
+    font-weight: 600;
+    color: var(--color-orange-500);
+    opacity: 0.85;
+  }
+
+  .eje-block__objetivo { color: var(--color-text-muted); }
+
+  .eje-block__lineas-label {
+    font-weight: 700;
+    color: var(--color-green-900);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+
+  .eje-block__lineas {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.35rem 1.5rem;
+  }
+  .eje-block__lineas li { color: var(--color-text); }
+
+  @media (max-width: 600px) {
+    .eje-block { grid-template-columns: 1fr; }
+    .eje-block__number { font-size: 1.8rem; }
+  }
+</style>
